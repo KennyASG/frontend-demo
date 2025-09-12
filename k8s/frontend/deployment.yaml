@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-demo
+  namespace: microservices
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: frontend-demo
+  template:
+    metadata:
+      labels:
+        app: frontend-demo
+    spec:
+      containers:
+        - name: frontend-demo
+          image: kennyadg/frontend-demo:latest
+          ports:
+            - containerPort: 3000

@@ -4,6 +4,7 @@
 import { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/stores/auth-store';
+import { isAdmin, getRoleName } from '@/types/auth';
 
 export default function DashboardPage() {
   const { user, isAuthenticated, logout } = useAuthStore();
@@ -18,6 +19,16 @@ export default function DashboardPage() {
   const handleLogout = () => {
     logout();
     router.push('/login');
+  };
+
+  // Helper para obtener iniciales del nombre
+  const getInitials = (name: string): string => {
+    return name
+      .split(' ')
+      .map(word => word.charAt(0))
+      .slice(0, 2)
+      .join('')
+      .toUpperCase();
   };
 
   if (!user) {
@@ -60,7 +71,10 @@ export default function DashboardPage() {
             ¡Bienvenido, {user.name}! 🎉
           </h2>
           <p className="text-gray-400">
-            Estás autenticado correctamente en SoundMax
+            Estás autenticado correctamente en SoundMax como{' '}
+            <span className="text-orange-400 font-semibold">
+              {getRoleName(user.role)}
+            </span>
           </p>
         </div>
 
@@ -71,23 +85,23 @@ export default function DashboardPage() {
             <div className="flex items-center space-x-3 mb-4">
               <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-full flex items-center justify-center">
                 <span className="text-xl font-bold">
-                  {user.name.charAt(0)}{user.lastname.charAt(0)}
+                  {getInitials(user.name)}
                 </span>
               </div>
               <div>
                 <h3 className="text-white font-semibold">Perfil</h3>
-                <p className="text-gray-400 text-sm">{user.role}</p>
+                <p className="text-gray-400 text-sm">{getRoleName(user.role)}</p>
               </div>
             </div>
             <div className="space-y-2 text-sm">
               <p className="text-gray-300">
-                <span className="text-gray-500">Nombre:</span> {user.name} {user.lastname}
+                <span className="text-gray-500">Nombre:</span> {user.name}
               </p>
               <p className="text-gray-300">
                 <span className="text-gray-500">Email:</span> {user.email}
               </p>
               <p className="text-gray-300">
-                <span className="text-gray-500">Teléfono:</span> {user.phone}
+                <span className="text-gray-500">ID:</span> {user.id}
               </p>
             </div>
           </div>
@@ -113,18 +127,86 @@ export default function DashboardPage() {
           </div>
         </div>
 
+        {/* Admin Panel - Solo visible para administradores */}
+        {isAdmin(user) && (
+          <div className="mt-8 bg-gradient-to-br from-red-900/40 to-orange-900/40 backdrop-blur-xl border border-red-700/50 rounded-2xl p-6">
+            <div className="flex items-center space-x-2 mb-4">
+              <span className="text-2xl">👑</span>
+              <h3 className="text-xl font-bold text-white">Panel de Administrador</h3>
+            </div>
+            <p className="text-gray-300 mb-6">
+              Acceso exclusivo a funciones administrativas
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+              <button
+                onClick={() => router.push('/admin/concerts')}
+                className="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-600 rounded-xl p-4 text-left transition-all"
+              >
+                <span className="text-2xl mb-2 block">🎤</span>
+                <h4 className="text-white font-semibold mb-1">Conciertos</h4>
+                <p className="text-gray-400 text-sm">Gestionar eventos</p>
+              </button>
+              
+              <button
+                onClick={() => router.push('/admin/venues')}
+                className="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-600 rounded-xl p-4 text-left transition-all"
+              >
+                <span className="text-2xl mb-2 block">🏟️</span>
+                <h4 className="text-white font-semibold mb-1">Venues</h4>
+                <p className="text-gray-400 text-sm">Administrar lugares</p>
+              </button>
+              
+              <button
+                onClick={() => router.push('/admin/users')}
+                className="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-600 rounded-xl p-4 text-left transition-all"
+              >
+                <span className="text-2xl mb-2 block">👥</span>
+                <h4 className="text-white font-semibold mb-1">Usuarios</h4>
+                <p className="text-gray-400 text-sm">Gestionar usuarios</p>
+              </button>
+              
+              <button
+                onClick={() => router.push('/admin/stats')}
+                className="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-600 rounded-xl p-4 text-left transition-all"
+              >
+                <span className="text-2xl mb-2 block">📊</span>
+                <h4 className="text-white font-semibold mb-1">Estadísticas</h4>
+                <p className="text-gray-400 text-sm">Ver reportes</p>
+              </button>
+            </div>
+          </div>
+        )}
+
         {/* Quick Actions */}
-        <div className="mt-8 bg-gray-800/80 backdrop-blur-xl border border-gray-700/50 rounded-2xl p-6">
+        <div className="mt-8">
           <h3 className="text-xl font-bold text-white mb-4">Acciones Rápidas</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <button className="bg-gradient-to-r from-red-500 to-orange-500 hover:scale-105 transition-all text-white py-3 px-6 rounded-xl font-semibold">
-              Ver Conciertos
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <button
+              onClick={() => router.push('/concerts')}
+              className="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700/50 rounded-xl p-6 text-left transition-all group"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-3xl">🎵</span>
+                <span className="text-gray-400 group-hover:text-orange-400 transition-colors">→</span>
+              </div>
+              <h4 className="text-white font-semibold mb-1">Ver Conciertos</h4>
+              <p className="text-gray-400 text-sm">
+                Explora los próximos eventos disponibles
+              </p>
             </button>
-            <button className="bg-gray-700 hover:bg-gray-600 transition-colors text-white py-3 px-6 rounded-xl font-semibold">
-              Mi Perfil
-            </button>
-            <button className="bg-gray-700 hover:bg-gray-600 transition-colors text-white py-3 px-6 rounded-xl font-semibold">
-              Mis Tickets
+            
+            <button
+              onClick={() => router.push('/my-tickets')}
+              className="bg-gray-800/80 hover:bg-gray-700/80 border border-gray-700/50 rounded-xl p-6 text-left transition-all group"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <span className="text-3xl">🎫</span>
+                <span className="text-gray-400 group-hover:text-orange-400 transition-colors">→</span>
+              </div>
+              <h4 className="text-white font-semibold mb-1">Mis Tickets</h4>
+              <p className="text-gray-400 text-sm">
+                Revisa tus compras y próximos eventos
+              </p>
             </button>
           </div>
         </div>

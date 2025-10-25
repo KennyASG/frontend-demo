@@ -1,7 +1,8 @@
 // app/layout.tsx
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import AuthProvider from "./../components/providers/auth-provider";
+import AuthProvider from "@/src/components/providers/auth-provider";
+import "./globals.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,7 +16,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "SoundMax - Vive la música",
-  description: "La mejor experiencia musical",
+  description: "La mejor experiencia en conciertos y eventos musicales",
 };
 
 export default function RootLayout({

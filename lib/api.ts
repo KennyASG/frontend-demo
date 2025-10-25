@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000';
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'http://10.241.222.74:3000';
 
 export const api = axios.create({
   baseURL: API_BASE_URL,
@@ -46,15 +46,15 @@ export const authAPI = {
 // ========================================
 export const concertAPI = {
   getAll: () => 
-    api.get('http://localhost:3001/concert/concerts'),
+    api.get('http://10.241.222.74:3001/concert/concerts'),
   getById: (id: any) => 
-    api.get(`http://localhost:3001/concert/concert/${id}`),
+    api.get(`http://10.241.222.74:3001/concert/concert/${id}`),
   create: (data: any) => 
-    api.post('http://localhost:3001/concert/admin/concert', data),
+    api.post('http://10.241.222.74:3001/concert/admin/concert', data),
   update: (id: any, data: any) => 
-    api.put(`http://localhost:3001/concert/admin/concert/${id}`, data),
+    api.put(`http://10.241.222.74:3001/concert/admin/concert/${id}`, data),
   delete: (id: any) => 
-    api.delete(`http://localhost:3001/concert/admin/concert/${id}`),
+    api.delete(`http://10.241.222.74:3001/concert/admin/concert/${id}`),
 };
 
 // ========================================
@@ -62,15 +62,15 @@ export const concertAPI = {
 // ========================================
 export const venueAPI = {
   getAll: () => 
-    api.get('http://localhost:3002/venue/venues'),
+    api.get('http://10.241.222.74:3002/venue/venues'),
   getById: (id: any) => 
-    api.get(`http://localhost:3002/venue/${id}`),
+    api.get(`http://10.241.222.74:3002/venue/${id}`),
   getSections: (id: any) => 
-    api.get(`http://localhost:3002/venue/${id}/sections`),
+    api.get(`http://10.241.222.74:3002/venue/${id}/sections`),
   create: (data: any) => 
-    api.post('http://localhost:3002/admin/venue', data),
+    api.post('http://10.241.222.74:3002/admin/venue', data),
   createSection: (venueId: any, data: any) => 
-    api.post(`http://localhost:3002/admin/venue/${venueId}/section`, data),
+    api.post(`http://10.241.222.74:3002/admin/venue/${venueId}/section`, data),
 };
 
 // ========================================
@@ -78,15 +78,15 @@ export const venueAPI = {
 // ========================================
 export const ticketAPI = {
   getTypes: (concertId: any) => 
-    api.get(`http://localhost:3003/concert/${concertId}/ticket-types`),
+    api.get(`http://10.241.222.74:3003/concert/${concertId}/ticket-types`),
   createType: (concertId: any, data: any) => 
-    api.post(`http://localhost:3003/admin/concert/${concertId}/ticket-type`, data),
+    api.post(`http://10.241.222.74:3003/admin/concert/${concertId}/ticket-type`, data),
   reserve: (data: any) => 
-    api.post('http://localhost:3003/ticket/reserve', data),
+    api.post('http://10.241.222.74:3003/ticket/reserve', data),
   getReservations: () => 
-    api.post('http://localhost:3003/ticket/reservations'),
+    api.post('http://10.241.222.74:3003/ticket/reservations'),
   releaseExpired: () => 
-    api.post('http://localhost:3003/admin/tickets/release-expired'),
+    api.post('http://10.241.222.74:3003/admin/tickets/release-expired'),
 };
 
 // ========================================
@@ -94,17 +94,17 @@ export const ticketAPI = {
 // ========================================
 export const orderAPI = {
   create: (data: any) => 
-    api.post('http://localhost:3004/order', data),
+    api.post('http://10.241.222.74:3004/order', data),
   getById: (id: any) => 
-    api.get(`http://localhost:3004/order/${id}`),
+    api.get(`http://10.241.222.74:3004/order/${id}`),
   confirm: (orderId: any) => 
-    api.post(`http://localhost:3004/order/${orderId}/confirm`),
+    api.post(`http://10.241.222.74:3004/order/${orderId}/confirm`),
   getUserOrders: (userId: any) => 
-    api.get(`http://localhost:3004/order/orders/user/${userId}`),
+    api.get(`http://10.241.222.74:3004/order/orders/user/${userId}`),
   getAllOrders: () => 
-    api.get('http://localhost:3004/order/admin/orders'),
+    api.get('http://10.241.222.74:3004/order/admin/orders'),
   getSalesByConcert: (concertId: any) => 
-    api.get(`http://localhost:3004/order/admin/concert/${concertId}/sales`),
+    api.get(`http://10.241.222.74:3004/order/admin/concert/${concertId}/sales`),
 };
 
 // ========================================
@@ -112,11 +112,11 @@ export const orderAPI = {
 // ========================================
 export const notificationAPI = {
   sendTickets: (orderId: any) => 
-    api.post(`http://localhost:3005/notification/order/${orderId}/send-tickets`),
+    api.post(`http://10.241.222.74:3005/notification/order/${orderId}/send-tickets`),
   sendConfirmation: (orderId: any) => 
-    api.post(`http://localhost:3005/notification/order/${orderId}/send-confirmation`),
+    api.post(`http://10.241.222.74:3005/notification/order/${orderId}/send-confirmation`),
   getAll: () => 
-    api.get('http://localhost:3005/notification/notifications'),
+    api.get('http://10.241.222.74:3005/notification/notifications'),
 };
 
 export default api;
